@@ -167,8 +167,11 @@ a:hover .flecha { opacity: 0.7; }
 }
 
 .email-setting { padding: 18px; }
-.email-setting h2 { font-size: 14px; margin-bottom: 5px; }
-.email-setting h2 i { color: var(--lime); margin-right: 7px; }
+.email-setting h2 { font-size: 14px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+.settings-mail-icon {
+  width: 18px; height: 18px; flex: none; fill: none; stroke: var(--lime);
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
 .email-setting p { color: var(--t2); font-size: 12px; }
 .email-setting-form { display: flex; gap: 8px; margin-top: 14px; }
 .email-setting-form input {

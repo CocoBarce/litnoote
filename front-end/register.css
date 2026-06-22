@@ -29,12 +29,17 @@ body {
   overflow: hidden;
 }
 
-.icono-texto {
-  color: #985cf9;
-  font-size: 17px;
-  width: 22px;
-  text-align: center;
+.mail-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
   flex: none;
+  fill: none;
+  stroke: #985cf9;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .85;
 }
 
 body::before {

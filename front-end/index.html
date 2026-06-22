@@ -1,70 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="inicio.css">
-    <link rel="icon" type="image/png" href="./IMGS/Frame 69.png">
-    <title>Litnoote</title>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Litnoote convierte tus apuntes en una experiencia de estudio colaborativa con quizzes generados por IA.">
+  <link rel="stylesheet" href="inicio.css?v=20260621-3">
+  <link rel="icon" type="image/png" href="./IMGS/Frame 69.png">
+  <title>Litnoote — Tus apuntes, listos para estudiar</title>
+</head>
+<body>
+  <nav class="topnav" aria-label="Navegación principal">
+    <a class="brand-mark" href="#inicio" aria-label="Litnoote, inicio">
+      <span class="brand-symbol"><img src="./IMGS/isotipo.png" alt="Isotipo de Litnoote"></span>
+      <span class="brand-name">Litnoote</span>
+    </a>
+    <div class="nav-links">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#ventajas">Ventajas</a>
+    </div>
+    <a href="iniciosesion.html" class="nav-login">Entrar <span>↗</span></a>
+  </nav>
 
-    <nav class="topnav">
-      <div class="brand-mark">
-        <img src="./IMGS/Frame 69.png" alt="Litnoote" class="brand-icon">
-        <span class="brand-name">Litnoote</span>
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <div class="hero-eyebrow"><span></span> Apuntes colaborativos + práctica con IA</div>
+        <h1>
+          <span class="headline-line">Transformá el</span>
+          <span class="headline-line">conocimiento abstracto</span>
+          <em class="headline-line">en experiencia tangible.</em>
+        </h1>
+        <p class="hero-sub">
+          Escribí con tu grupo y convertí cualquier apunte en práctica real con quizzes generados por IA.
+        </p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="register.html">Crear mi espacio <span>→</span></a>
+          <a class="btn-secondary" href="iniciosesion.html">Ya tengo cuenta</a>
+        </div>
+        <div class="hero-proof">
+          <div class="avatar-row" aria-hidden="true">
+            <span style="--avatar:#985cf9">M</span>
+            <span style="--avatar:#2e9e6b">T</span>
+            <span style="--avatar:#e8943a">J</span>
+            <span style="--avatar:#e5484d">+</span>
+          </div>
+          <p><strong>Un apunte, todo el grupo.</strong><br>Edición y cursores en tiempo real.</p>
+        </div>
       </div>
-      <a href="iniciosesion.html" class="nav-login">Iniciar sesión →</a>
-    </nav>
 
-    <main class="mi-contenedor">
-      <div class="hero-eyebrow">
-        <span class="eyebrow-dot"></span>
-        Notas colaborativas con quiz por IA
+      <div class="product-stage" aria-label="Vista previa de Litnoote">
+        <div class="stage-note note-one">Mañana: Revolución cubana</div>
+        <div class="stage-note note-two">Quiz listo ✓</div>
+        <div class="app-window">
+          <div class="window-top">
+            <div class="window-brand">
+              <span class="mini-logo"><img src="./IMGS/isotipo.png" alt=""></span>
+              <span><strong>Historia</strong><small>3 personas editando</small></span>
+            </div>
+            <div class="window-people">
+              <span class="person purple">M</span><span class="person green">T</span><span class="person orange">J</span>
+              <button>Compartir</button>
+            </div>
+          </div>
+          <div class="window-tools">
+            <span>Normal</span><b>B</b><i>I</i><span>U̲</span><span>• Lista</span><span>↶</span><span>↷</span>
+          </div>
+          <div class="editor-preview">
+            <div class="doc-kicker">UNIDAD 3 · HISTORIA</div>
+            <h2>La Revolución cubana</h2>
+            <p>Fue un movimiento revolucionario liderado por <mark>Fidel Castro</mark> y el Movimiento 26 de Julio.</p>
+            <p class="selected-text">La revolución comenzó el 26 de julio de 1953 y transformó profundamente la sociedad cubana.</p>
+            <div class="remote-caret caret-one"><span>Marina</span></div>
+            <div class="remote-caret caret-two"><span>Tania</span></div>
+            <div class="quiz-popover">
+              <div class="quiz-popover-top"><span>✦</span> Quiz generado</div>
+              <strong>¿Cuándo comenzó la revolución?</strong>
+              <div class="answer-grid"><span>1953</span><span>1959</span></div>
+            </div>
+          </div>
+          <div class="window-status"><span>83 palabras</span><span>Guardado</span></div>
+        </div>
       </div>
+    </section>
 
-      <h1 class="parrafo">
-        Escribí,<br>estudiá,<br><em>aprendé.</em>
-      </h1>
-
-      <p class="hero-sub">
-        Creá tus notas, seleccioná el texto y generá un quiz al instante.<br>
-        Colaborativo y en tiempo real.
-      </p>
-
-      <div class="btn-group">
-        <button class="btniniciar">Empezar ahora</button>
-        <button class="btncrear">Crear cuenta</button>
+    <section class="ticker" aria-label="Funciones principales">
+      <div class="ticker-track">
+        <span>Editor colaborativo</span><i>✦</i><span>Quizzes con IA</span><i>✦</i>
+        <span>Perfiles de estudio</span><i>✦</i><span>Progreso real</span><i>✦</i>
+        <span>Editor colaborativo</span><i>✦</i><span>Quizzes con IA</span><i>✦</i>
+        <span>Perfiles de estudio</span><i>✦</i><span>Progreso real</span>
       </div>
+    </section>
 
-      <div class="feature-pills">
-        <span class="pill">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          Quiz con IA
-        </span>
-        <span class="pill">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Tiempo real
-        </span>
-        <span class="pill">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Colaborativo
-        </span>
+    <section class="steps" id="como-funciona">
+      <div class="section-intro">
+        <span class="section-number">01</span>
+        <div><p class="section-label">Cómo funciona</p><h2>Menos organizar.<br>Más entender.</h2></div>
       </div>
-    </main>
+      <div class="steps-grid">
+        <article>
+          <span class="step-num">01</span>
+          <div class="step-icon">✎</div>
+          <h3>Escribí</h3>
+          <p>Armá apuntes completos con formato, archivos adjuntos y todo tu grupo conectado.</p>
+        </article>
+        <article class="featured-step">
+          <span class="step-num">02</span>
+          <div class="step-icon">✦</div>
+          <h3>Convertí</h3>
+          <p>Seleccioná cualquier fragmento y generá preguntas para practicar al instante.</p>
+        </article>
+        <article>
+          <span class="step-num">03</span>
+          <div class="step-icon">↗</div>
+          <h3>Avanzá</h3>
+          <p>Medí tu progreso, sumá experiencia y llegá al examen sabiendo qué reforzar.</p>
+        </article>
+      </div>
+    </section>
 
-    <div class="orb orb-1" aria-hidden="true"></div>
-    <div class="orb orb-2" aria-hidden="true"></div>
-    <div class="orb orb-3" aria-hidden="true"></div>
+    <section class="benefits" id="ventajas">
+      <div class="benefit-main">
+        <p class="section-label">Hecho para estudiar de verdad</p>
+        <h2>Tu grupo deja de repartirse entre cinco aplicaciones.</h2>
+        <p>Notas, colaboración, archivos, práctica y seguimiento viven en un mismo espacio.</p>
+        <a href="register.html">Empezar gratis <span>→</span></a>
+      </div>
+      <div class="benefit-list">
+        <div><span>01</span><strong>Cursores y presencia en vivo</strong><small>Sabés quién está escribiendo y dónde.</small></div>
+        <div><span>02</span><strong>PDF, Word y más</strong><small>El material queda junto al apunte.</small></div>
+        <div><span>03</span><strong>Quiz normal o avanzado</strong><small>Practicá solo o desafiá a un compañero.</small></div>
+        <div><span>04</span><strong>Tu progreso, visible</strong><small>Rachas, perfiles, logros y resultados.</small></div>
+      </div>
+    </section>
 
-    <script>
-      document.querySelector('.btniniciar').addEventListener('click', () => {
-        window.location.href = 'iniciosesion.html';
-      });
-      document.querySelector('.btncrear').addEventListener('click', () => {
-        window.location.href = 'register.html';
-      });
-    </script>
-  </body>
+    <section class="final-cta">
+      <div>
+        <span class="cta-spark">✦</span>
+        <p>El próximo examen empieza acá.</p>
+        <h2>Hacé que tus apuntes<br><em>te devuelvan algo.</em></h2>
+      </div>
+      <a href="register.html">Crear cuenta <span>↗</span></a>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand-mark" href="#inicio"><span class="brand-symbol"><img src="./IMGS/isotipo.png" alt="Isotipo de Litnoote"></span><span class="brand-name">Litnoote</span></a>
+    <p>Hecho para estudiar acompañado.</p>
+    <span>© 2026</span>
+  </footer>
+</body>
 </html>
