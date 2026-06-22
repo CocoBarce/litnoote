@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi progreso - Litnoote</title>
+  <link rel="stylesheet" href="document.css">
+  <link rel="stylesheet" href="progreso.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="./IMGS/Frame 69.png">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img id="sidebar-avatar" src="" alt="" style="display:none;width:32px;height:32px;border-radius:9px;object-fit:cover;">
+        <i class="fas fa-book-open" id="sidebar-default-icon"></i>
+      </div>
+      <div>
+        <div class="sidebar-brand">Litnoote</div>
+        <div class="sidebar-user-label" id="sidebar-username">Cargando...</div>
+      </div>
+    </div>
+    <div class="sidebar-xp" id="sidebar-xp">
+      <div class="sidebar-xp-top">
+        <span id="sidebar-level-label">Nivel 1</span>
+        <span id="sidebar-xp-count">0 XP</span>
+      </div>
+      <div class="sidebar-xp-bar">
+        <div class="sidebar-xp-fill" id="sidebar-xp-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <ul class="menu">
+      <li onclick="window.location.href='document.html'"><i class="fas fa-home"></i> Inicio</li>
+      <li onclick="window.location.href='document.html'"><i class="fas fa-file-alt"></i> Documentos</li>
+      <li class="active"><i class="fas fa-chart-line"></i> Progreso</li>
+    </ul>
+    <ul class="menu-bottom">
+      <li onclick="window.location.href='document.html'"><i class="fas fa-arrow-left"></i> Volver</li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <div class="view" id="progreso-view">
+      <!-- Top stats -->
+      <div class="prog-header">
+        <h1>Tu progreso</h1>
+        <p>Asi evolucionaste hasta hoy</p>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="color:oklch(0.83 0.21 138)"><i class="fas fa-bolt"></i></div>
+          <div class="stat-card-label">XP total</div>
+          <div class="stat-card-value" id="prog-xp">0</div>
+          <div class="stat-card-sub" id="prog-xp-sub">Nivel 1</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon" style="color:oklch(0.71 0.16 58)"><i class="fas fa-fire"></i></div>
+          <div class="stat-card-label">Racha maxima</div>
+          <div class="stat-card-value" id="prog-streak-max">0 <span>dias</span></div>
+          <div class="stat-card-sub" id="prog-streak-cur">actual: 0 dias</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon" style="color:oklch(0.65 0.17 160)"><i class="fas fa-check-circle"></i></div>
+          <div class="stat-card-label">Quizzes</div>
+          <div class="stat-card-value" id="prog-quizzes">0</div>
+          <div class="stat-card-sub" id="prog-accuracy">acierto medio --</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon" style="color:oklch(0.65 0.20 295)"><i class="fas fa-layer-group"></i></div>
+          <div class="stat-card-label">Perfiles</div>
+          <div class="stat-card-value" id="prog-profiles">0</div>
+          <div class="stat-card-sub">de estudio creados</div>
+        </div>
+      </div>
+
+      <!-- Chart + domain -->
+      <div class="prog-grid-2">
+        <div class="prog-card prog-chart-card">
+          <div class="prog-card-title">Evolucion de tus quizzes</div>
+          <div class="prog-card-sub" id="chart-sub">% de acierto por sesion</div>
+          <div id="quiz-chart-wrap">
+            <svg id="quiz-chart" width="100%" viewBox="0 0 500 180" preserveAspectRatio="none" style="display:block;margin-top:12px"></svg>
+            <div class="chart-labels" id="chart-labels"></div>
+          </div>
+          <div id="chart-empty" class="chart-empty" style="display:none">
+            <i class="fas fa-chart-line"></i>
+            <p>Completa quizzes para ver tu evolucion</p>
+          </div>
+        </div>
+
+        <div class="prog-card domain-card">
+          <div class="prog-card-title">Dominio por perfil</div>
+          <div class="domain-bars" id="domain-bars">
+            <div class="domain-empty">Sin perfiles aun</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" style="margin-top:14px">
+        <div class="prog-card-title">Eficiencia de apuntes</div>
+        <div class="prog-card-sub">Avance estimado según la cantidad de contenido escrito en cada perfil</div>
+        <div class="summary-overview">
+          <div class="summary-total">
+            <strong id="summary-words">0</strong>
+            <span>palabras escritas</span>
+          </div>
+          <div class="summary-profile-bars" id="summary-profile-bars"></div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="prog-card" style="margin-top:14px">
+        <div class="prog-card-title">Logros <span id="badges-count" style="font-size:12px;font-weight:600;color:var(--t3)"></span></div>
+        <div class="badges-grid" id="badges-grid"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  var socket = io({ auth: { token: localStorage.getItem("sessionToken") || "" } });
+  socket.on('session-error', function() {
+    localStorage.removeItem('sessionToken');
+    localStorage.removeItem('userDEV');
+    window.location.href = 'iniciosesion.html';
+  });
+  var user = localStorage.getItem('userDEV');
+  if (user) document.getElementById('sidebar-username').textContent = user;
+
+  var savedPhoto = localStorage.getItem('profilePhoto_' + user);
+  if (savedPhoto) {
+    var av = document.getElementById('sidebar-avatar');
+    av.src = savedPhoto; av.style.display = 'block';
+    document.getElementById('sidebar-default-icon').style.display = 'none';
+  }
+
+  var ALL_BADGES = [
+    { id: 'racha_7',   icon: 'fa-fire',             color: '#F0883E', bg: '#2a1f14', label: 'Racha 7' },
+    { id: 'primer_10', icon: 'fa-star',              color: '#2E9E6B', bg: '#142a1f', label: 'Primer 10/10' },
+    { id: 'racha_18',  icon: 'fa-fire-flame-curved', color: '#E5484D', bg: '#2a1414', label: 'Racha 18' },
+    { id: 'nivel_10',  icon: 'fa-trophy',            color: '#985CF9', bg: '#1e1428', label: 'Nivel 10' },
+    { id: 'resumidor', icon: 'fa-align-left',        color: '#3B9EDE', bg: '#142028', label: 'Resumidor' },
+    { id: 'duo_1v1',   icon: 'fa-users',             color: '#B96D3F', bg: '#271a0f', label: 'Duo 1v1' },
+    { id: 'madrugador',icon: 'fa-sun',               color: '#E8943A', bg: '#2a1c0e', label: 'Madrugador' },
+    { id: 'maraton',   icon: 'fa-dumbbell',          color: '#985CF9', bg: '#1e1428', label: 'Maraton' },
+  ];
+
+  function renderBadges(earned) {
+    var grid = document.getElementById('badges-grid');
+    document.getElementById('badges-count').textContent = earned.length + ' de ' + ALL_BADGES.length;
+    grid.innerHTML = '';
+    ALL_BADGES.forEach(function(b) {
+      var unlocked = earned.indexOf(b.id) !== -1;
+      var el = document.createElement('div');
+      el.className = 'badge-item' + (unlocked ? '' : ' locked');
+      el.innerHTML =
+        '<div class="badge-icon" style="background:' + (unlocked ? b.bg : 'oklch(0.14 0.03 265)') + ';color:' + (unlocked ? b.color : 'oklch(0.35 0.03 265)') + '">' +
+        '<i class="fas ' + b.icon + '"></i>' +
+        '</div>' +
+        '<span>' + b.label + '</span>';
+      grid.appendChild(el);
+    });
+  }
+
+  function renderChart(history) {
+    var svg = document.getElementById('quiz-chart');
+    var wrap = document.getElementById('quiz-chart-wrap');
+    var empty = document.getElementById('chart-empty');
+    var labelsEl = document.getElementById('chart-labels');
+
+    if (history.length === 0) {
+      wrap.style.display = 'none';
+      empty.style.display = 'flex';
+      return;
+    }
+
+    wrap.style.display = '';
+    empty.style.display = 'none';
+
+    var last10 = history.slice(-10);
+    var W = 500, H = 180;
+    var pad = { t: 20, b: 30, l: 40, r: 20 };
+    var pts = last10.map(function(q, i) {
+      return {
+        x: pad.l + (i / Math.max(last10.length - 1, 1)) * (W - pad.l - pad.r),
+        y: pad.t + (1 - q.score / q.total) * (H - pad.t - pad.b),
+        pct: Math.round(q.score / q.total * 100),
+        date: q.date
+      };
+    });
+
+    var avgScore = Math.round(history.reduce(function(a, q) { return a + q.score/q.total; }, 0) / history.length * 100);
+    document.getElementById('chart-sub').textContent = '% de acierto \u00B7 promedio ' + avgScore + '%';
+
+    var path = pts.map(function(p, i) { return (i === 0 ? 'M' : 'L') + p.x + ',' + p.y; }).join(' ');
+    var area = path + ' L' + pts[pts.length-1].x + ',' + (H-pad.b) + ' L' + pts[0].x + ',' + (H-pad.b) + ' Z';
+
+    var circles = pts.map(function(p, i) {
+      var r = (i === pts.length - 1) ? 5 : 3.5;
+      var fill = (i === pts.length - 1) ? '#985CF9' : '#ffffff';
+      return '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + r + '" fill="' + fill + '" stroke="#985CF9" stroke-width="2"/>';
+    }).join('');
+
+    var midY = pad.t + (H - pad.t - pad.b) / 2;
+    svg.innerHTML =
+      '<defs>' +
+      '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#985CF9" stop-opacity=".22"/>' +
+      '<stop offset="1" stop-color="#985CF9" stop-opacity="0"/>' +
+      '</linearGradient>' +
+      '</defs>' +
+      '<line x1="' + pad.l + '" y1="' + pad.t + '" x2="' + (W-pad.r) + '" y2="' + pad.t + '" stroke="#F0EDF6" stroke-width="1"/>' +
+      '<line x1="' + pad.l + '" y1="' + midY + '" x2="' + (W-pad.r) + '" y2="' + midY + '" stroke="#F0EDF6" stroke-width="1"/>' +
+      '<line x1="' + pad.l + '" y1="' + (H-pad.b) + '" x2="' + (W-pad.r) + '" y2="' + (H-pad.b) + '" stroke="#E6E2EE" stroke-width="1"/>' +
+      '<text x="' + (pad.l-5) + '" y="' + (pad.t+4) + '" text-anchor="end" font-size="10" fill="#BBB7C7">100</text>' +
+      '<text x="' + (pad.l-5) + '" y="' + (midY+4) + '" text-anchor="end" font-size="10" fill="#BBB7C7">50</text>' +
+      '<text x="' + (pad.l-5) + '" y="' + (H-pad.b+4) + '" text-anchor="end" font-size="10" fill="#BBB7C7">0</text>' +
+      '<path d="' + area + '" fill="url(#g)"/>' +
+      '<path d="' + path + '" fill="none" stroke="#985CF9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+      circles;
+
+    labelsEl.innerHTML = '';
+    last10.forEach(function(q, i) {
+      var lbl = document.createElement('span');
+      lbl.textContent = q.date ? q.date.slice(5) : ('Q' + (i+1));
+      labelsEl.appendChild(lbl);
+    });
+  }
+
+  function renderDomainBars(profiles) {
+    var container = document.getElementById('domain-bars');
+    if (!profiles.length) {
+      container.innerHTML = '<div class="domain-empty">Sin perfiles aun</div>';
+      return;
+    }
+    container.innerHTML = '';
+    var sorted = profiles.slice().sort(function(a, b) { return (b.domain || 0) - (a.domain || 0); });
+    sorted.forEach(function(p) {
+      var row = document.createElement('div');
+      row.className = 'domain-row';
+      row.innerHTML =
+        '<div class="domain-row-top">' +
+        '<span style="font-size:13px;font-weight:700;color:var(--t1)">' + p.nombre + '</span>' +
+        '<span style="font-size:13px;font-weight:800;color:var(--t1);font-variant-numeric:tabular-nums">' + (p.domain || 0) + '%</span>' +
+        '</div>' +
+        '<div class="domain-bar-wrap"><div class="domain-bar-fill" style="width:' + (p.domain || 0) + '%;background:' + p.color + '"></div></div>';
+      container.appendChild(row);
+    });
+  }
+
+  function renderSummaryProgress(profiles, noteWords) {
+    document.getElementById('summary-words').textContent = noteWords.toLocaleString('es-AR');
+    var container = document.getElementById('summary-profile-bars');
+    if (!profiles.length) {
+      container.innerHTML = '<div class="domain-empty">Crea un perfil y vincula un documento para medir tu avance</div>';
+      return;
+    }
+    container.innerHTML = '';
+    profiles.forEach(function(profile) {
+      var pct = profile.summaryProgress || 0;
+      var row = document.createElement('div');
+      row.className = 'summary-profile-row';
+      row.innerHTML =
+        '<div class="domain-row-top"><span>' + profile.nombre + '</span><strong>' + pct + '%</strong></div>' +
+        '<div class="domain-bar-wrap"><div class="domain-bar-fill" style="width:' + pct + '%;background:' + profile.color + '"></div></div>';
+      container.appendChild(row);
+    });
+  }
+
+  function updateSidebarXP(xp, level) {
+    var pct = Math.round(((xp - level.xpPrev) / (level.xpNeeded - level.xpPrev)) * 100);
+    if (isNaN(pct) || pct < 0) pct = 0;
+    document.getElementById('sidebar-level-label').textContent = 'Nv. ' + level.level + ' \u00B7 ' + level.name;
+    document.getElementById('sidebar-xp-count').textContent = xp.toLocaleString('es-AR') + ' XP';
+    document.getElementById('sidebar-xp-fill').style.width = pct + '%';
+  }
+
+  socket.emit('cargarProgreso', { user: user });
+
+  socket.on('progresoData', function(data) {
+    var xp = data.xp || 0;
+    var level = data.level;
+    var streak = data.streak || 0;
+    var streakMax = data.streakMax || 0;
+    var quizHistory = data.quizHistory || [];
+    var profiles = data.profiles || [];
+    var badges = data.badges || [];
+    var noteWords = data.noteWords || 0;
+
+    updateSidebarXP(xp, level);
+
+    document.getElementById('prog-xp').textContent = xp.toLocaleString('es-AR');
+    document.getElementById('prog-xp-sub').textContent = 'Nivel ' + level.level + ' \u00B7 ' + level.name;
+    document.getElementById('prog-streak-max').innerHTML = streakMax + ' <span>dias</span>';
+    document.getElementById('prog-streak-cur').textContent = 'actual: ' + streak + ' dias';
+    document.getElementById('prog-quizzes').textContent = quizHistory.length;
+    document.getElementById('prog-profiles').textContent = profiles.length;
+
+    if (quizHistory.length > 0) {
+      var avgAcc = Math.round(quizHistory.reduce(function(a, q) { return a + q.score/q.total; }, 0) / quizHistory.length * 100);
+      document.getElementById('prog-accuracy').textContent = 'acierto medio ' + avgAcc + '%';
+    }
+
+    renderChart(quizHistory);
+    renderDomainBars(profiles);
+    renderSummaryProgress(profiles, noteWords);
+    renderBadges(badges);
+  });
+</script>
+</body>
+</html>

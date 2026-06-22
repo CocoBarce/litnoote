@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión — Litnoote</title>
+  <link rel="stylesheet" href="iniciosesion.css">
+  <link rel="icon" type="image/png" href="./IMGS/Frame 69.png">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+  <img src="./IMGS/Group 1.png" id="nubeIzquierda" alt="">
+  <img src="./IMGS/Group 2.png" id="nubeDerecha" alt="">
+
+  <div id="rectangulo">
+    <div class="logo-card">
+      <img src="./IMGS/Frame 69.png" alt="Litnoote">
+    </div>
+    <h1 class="titulo">Bienvenido de nuevo</h1>
+    <p class="subtitulo-form">Ingresá tus datos para continuar</p>
+
+    <form id="form">
+      <div class="input-group">
+        <img src="./IMGS/Perfil.png" class="icono" alt="">
+        <input type="text" required placeholder="Usuario o mail" id="user" autocomplete="username">
+      </div>
+
+      <div class="input-group">
+        <img src="./IMGS/candado.png" class="icono" alt="">
+        <input type="password" required placeholder="Contraseña" id="password" autocomplete="current-password">
+      </div>
+
+      <button id="sesionbtn" type="submit">Continuar</button>
+    </form>
+
+    <p class="form-footer">¿No tenés cuenta? <a href="register.html">Crear cuenta</a></p>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="login.js"></script>
+</body>
+</html>

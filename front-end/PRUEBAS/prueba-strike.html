@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="prueba.css">
+    <title>Editor</title>
+
+</head>
+
+<body>
+    <div class="tiptap"></div>
+
+    <script type="module">
+        import { Editor } from 'https://esm.sh/@tiptap/core'
+        import Document from 'https://esm.sh/@tiptap/extension-document'
+        import Paragraph from 'https://esm.sh/@tiptap/extension-paragraph'
+        import Text from 'https://esm.sh/@tiptap/extension-text'
+
+        new Editor({
+            // bind Tiptap to the `.element`
+            element: document.querySelector('.tiptap'),
+            // register extensions
+            extensions: [Document, Paragraph, Text],
+            // set the initial content
+            content: '<p>Example Text</p>',
+            // place the cursor in the editor after initialization
+            autofocus: true,
+            // make the text editable (default is true)
+            editable: true,
+            // prevent loading the default ProseMirror CSS that comes with Tiptap
+            // should be kept as `true` for most cases as it includes styles
+            // important for Tiptap to work correctly
+            injectCSS: false,
+        })
+    </script>
+</body>
+
+</html>

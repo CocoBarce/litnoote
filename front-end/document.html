@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Litnoote</title>
+  <link rel="stylesheet" href="document.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="./IMGS/Frame 69.png">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo" id="sidebar-logo-wrap">
+          <img id="sidebar-avatar" src="" alt="" style="display:none;width:32px;height:32px;border-radius:9px;object-fit:cover;">
+          <i class="fas fa-book-open" id="sidebar-default-icon"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand">Litnoote</div>
+          <div class="sidebar-user-label" id="sidebar-username">Cargando...</div>
+        </div>
+      </div>
+
+      <!-- XP mini bar in sidebar -->
+      <div class="sidebar-xp" id="sidebar-xp">
+        <div class="sidebar-xp-top">
+          <span id="sidebar-level-label">Nivel 1 · Novato/a</span>
+          <span id="sidebar-xp-count">0 XP</span>
+        </div>
+        <div class="sidebar-xp-bar">
+          <div class="sidebar-xp-fill" id="sidebar-xp-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <ul class="menu">
+        <li id="btn-inicio" onclick="window.setView('dashboard')"><i class="fas fa-home"></i> Inicio</li>
+        <li id="btn-crear"><i class="fas fa-plus"></i> Crear</li>
+        <li id="btn-perfiles" onclick="window.setView('perfiles')"><i class="fas fa-layer-group"></i> Perfiles</li>
+        <li id="btn-quizzes" onclick="window.setView('quizzes')"><i class="fas fa-circle-question"></i> Quizzes</li>
+        <li id="btn-fav"  onclick="window.setView('favorites')"><i class="fas fa-star"></i> Favoritos</li>
+        <li id="btn-doc"  onclick="window.setView('all')"><i class="fas fa-file-alt"></i> Documentos</li>
+        <li id="btn-shared" onclick="window.setView('shared')"><i class="fas fa-user-group"></i> Compartidos conmigo <span class="invite-count" id="invite-count" style="display:none">0</span></li>
+        <li id="btn-del"  onclick="window.setView('deleted')"><i class="fas fa-trash-alt"></i> Eliminados</li>
+      </ul>
+
+      <ul class="menu-bottom">
+        <li onclick="window.location.href='progreso.html'"><i class="fas fa-chart-line"></i> Mi progreso</li>
+        <li id="perfil-btn"><i class="fas fa-user-circle"></i> Mi Perfil</li>
+        <li>
+          <a href="configuracion.html">
+            <i class="fas fa-cog"></i> Configuracion
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <!-- ===== DASHBOARD VIEW ===== -->
+      <div id="view-dashboard" class="view">
+        <!-- XP Banner -->
+        <div class="xp-banner" id="xp-banner">
+          <div class="xp-banner-left">
+            <div class="xp-level-badge" id="xp-level-num">1</div>
+            <div class="xp-banner-info">
+              <div class="xp-level-name" id="xp-level-name">Nivel 1 · Novato/a</div>
+              <div class="xp-bar-wrap">
+                <div class="xp-bar-fill" id="xp-bar-fill" style="width:0%"></div>
+              </div>
+              <div class="xp-bar-label" id="xp-bar-label">0 / 300 XP</div>
+            </div>
+          </div>
+          <div class="xp-banner-stats">
+            <div class="xp-stat">
+              <i class="fas fa-bolt"></i>
+              <span id="xp-total-stat">0</span>
+              <small>XP total</small>
+            </div>
+            <div class="xp-stat">
+              <i class="fas fa-fire"></i>
+              <span id="streak-stat">0</span>
+              <small>dias racha</small>
+            </div>
+            <div class="xp-stat">
+              <i class="fas fa-check-circle"></i>
+              <span id="quiz-stat">0</span>
+              <small>quizzes</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Study profiles section -->
+        <div class="section-header">
+          <span class="section-title">Tus perfiles</span>
+          <button class="btn-nuevo-perfil" id="btn-nuevo-perfil-dash">
+            <i class="fas fa-plus"></i> Nuevo perfil
+          </button>
+        </div>
+
+        <div class="profiles-grid" id="profiles-grid-dash"></div>
+
+        <!-- Recent docs section -->
+        <div class="section-header" style="margin-top:28px">
+          <span class="section-title">Continua donde quedaste</span>
+        </div>
+        <div class="recent-docs" id="recent-docs"></div>
+      </div>
+
+      <!-- ===== PERFILES VIEW ===== -->
+      <div id="view-perfiles" class="view" style="display:none">
+        <div class="search-bar">
+          <i class="fas fa-layer-group"></i>
+          <input type="text" placeholder="Buscar perfiles..." id="perfil-search">
+        </div>
+        <div class="section-header">
+          <span class="section-title">Perfiles de estudio</span>
+          <button class="btn-nuevo-perfil" id="btn-nuevo-perfil-view">
+            <i class="fas fa-plus"></i> Nuevo perfil
+          </button>
+        </div>
+        <div class="profiles-grid" id="profiles-grid-view"></div>
+      </div>
+
+      <!-- ===== DOCUMENTS/FAV/DELETED VIEW ===== -->
+      <div id="view-docs" class="view" style="display:none">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Buscar en Litnoote..." id="search-input">
+        </div>
+        <div class="section-header">
+          <span class="section-title" id="section-title-docs">Documentos</span>
+        </div>
+        <div class="document-list" id="document-list-container"></div>
+      </div>
+
+      <!-- ===== QUIZ HISTORY VIEW ===== -->
+      <div id="view-quizzes" class="view" style="display:none">
+        <div class="section-header">
+          <div>
+            <span class="section-title">Historial de quizzes</span>
+            <p class="section-subtitle">Tus resultados, XP y perfil de estudio</p>
+          </div>
+        </div>
+        <div class="quiz-history-list" id="quiz-history-list"></div>
+      </div>
+
+      <div id="view-shared" class="view" style="display:none">
+        <div class="section-header">
+          <div>
+            <span class="section-title">Compartidos conmigo</span>
+            <p class="section-subtitle">Documentos a los que otras personas te dieron acceso</p>
+          </div>
+        </div>
+        <div id="pending-invitations" class="pending-invitations"></div>
+        <div class="document-list" id="shared-document-list"></div>
+      </div>
+
+      <!-- ===== CREATE PANEL ===== -->
+      <div id="crear-panel" aria-hidden="true">
+        <div class="crear-fondo"></div>
+        <div class="crear-popup">
+          <button id="volver-crear" class="volver-crear" aria-label="Volver">&#8592;</button>
+          <h3>Crear documento</h3>
+          <div class="crear-item">
+            <input type="text" placeholder="Nombre del documento..." id="inputtt" autocomplete="off" />
+            <button class="btn-rojo" id="btn-rojo">Crear</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="overlay"></div>
+
+  <!-- Profile popup -->
+  <div id="perfil-popup">
+    <button id="editar-btn">Editar foto</button>
+    <img src="./IMGS/Group.png" id="popup-foto" alt="Foto de perfil">
+    <p id="popup-username" class="popup-username-text"></p>
+    <div class="popup-stats">
+      <p><i class="fas fa-bolt"></i> <span id="popup-xp">0 XP</span></p>
+      <p><i class="fas fa-fire"></i> Racha <span id="popup-streak">0</span> dias</p>
+      <p><i class="fas fa-layer-group"></i> <span id="popup-profiles">0</span> perfiles</p>
+    </div>
+    <div class="popup-actions">
+      <button class="boton-rojo" id="logout-btn">Cambiar cuenta</button>
+      <button class="boton-rojo" id="cerrar-sesion-btn">Cerrar sesion</button>
+    </div>
+  </div>
+
+  <!-- Edit photo menu -->
+  <div id="editar-popup">
+    <button class="mini-btn" id="btn-upload-foto"><i class="fas fa-upload" style="margin-right:8px"></i>Subir imagen</button>
+    <button class="mini-btn" id="btn-camera-foto"><i class="fas fa-camera" style="margin-right:8px"></i>Tomar foto</button>
+  </div>
+
+  <input type="file" id="photo-input" accept="image/*" style="display:none">
+
+  <!-- Nuevo perfil modal -->
+  <div id="nuevo-perfil-modal" style="display:none">
+    <div class="crear-fondo"></div>
+    <div class="crear-popup nuevo-perfil-popup">
+      <button class="volver-crear" id="cerrar-perfil-modal">&#8592;</button>
+      <h3>Nuevo perfil de estudio</h3>
+      <div class="perfil-form">
+        <input type="text" placeholder="Nombre del perfil (ej: 2a prueba de Historia)" id="perfil-nombre" autocomplete="off">
+        <input type="text" placeholder="Materia (ej: Historia)" id="perfil-materia" autocomplete="off">
+        <div class="color-picker-row">
+          <span>Color:</span>
+          <div class="color-options">
+            <button class="color-opt selected" data-color="#985CF9" style="background:#985CF9"></button>
+            <button class="color-opt" data-color="#2E9E6B" style="background:#2E9E6B"></button>
+            <button class="color-opt" data-color="#E8943A" style="background:#E8943A"></button>
+            <button class="color-opt" data-color="#E5484D" style="background:#E5484D"></button>
+            <button class="color-opt" data-color="#3B9EDE" style="background:#3B9EDE"></button>
+          </div>
+        </div>
+        <label style="font-size:12px;font-weight:600;color:var(--t3)">Fecha del examen (opcional)</label>
+        <input type="date" id="perfil-fecha">
+        <button class="btn-rojo" id="btn-crear-perfil" style="margin-top:4px;position:static;transform:none;right:auto;top:auto;">Crear perfil <i class="fas fa-bolt" style="color:#fff"></i> +20 XP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- XP toast notification -->
+  <div class="xp-toast" id="xp-toast" style="display:none"></div>
+  <div class="toast" id="toast"></div>
+  <div class="doc-context-menu" id="doc-context-menu" role="menu" aria-hidden="true"></div>
+
+  <script>
+    // Toast
+    function showToast(msg, type) {
+      if (type === undefined) type = 'ok';
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (type === 'error' ? ' error' : '');
+      requestAnimationFrame(function() { t.classList.add('show'); });
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    function showXPToast(xpEarned, reason) {
+      const t = document.getElementById('xp-toast');
+      t.innerHTML = '<i class="fas fa-bolt"></i> +' + xpEarned + ' XP <small>' + reason + '</small>';
+      t.style.display = 'flex';
+      requestAnimationFrame(function() { t.classList.add('show'); });
+      clearTimeout(t._xpTimer);
+      t._xpTimer = setTimeout(function() { t.classList.remove('show'); setTimeout(function() { t.style.display='none'; }, 400); }, 3000);
+    }
+
+    // Usuario
+    const currentUser = localStorage.getItem('userDEV');
+    if (currentUser) {
+      document.getElementById('sidebar-username').textContent = currentUser;
+      document.getElementById('popup-username').textContent  = currentUser;
+    }
+
+    // Foto de perfil
+    function setProfilePhoto(dataUrl) {
+      const popupFoto    = document.getElementById('popup-foto');
+      const sidebarAvatar = document.getElementById('sidebar-avatar');
+      const sidebarIcon  = document.getElementById('sidebar-default-icon');
+      if (popupFoto)    popupFoto.src = dataUrl;
+      if (sidebarAvatar) {
+        sidebarAvatar.src          = dataUrl;
+        sidebarAvatar.style.display = 'block';
+      }
+      if (sidebarIcon) sidebarIcon.style.display = 'none';
+    }
+    const savedPhoto = localStorage.getItem('profilePhoto_' + currentUser);
+    if (savedPhoto) setProfilePhoto(savedPhoto);
+
+    const photoInput = document.getElementById('photo-input');
+    photoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { showToast('La imagen no puede superar 5 MB', 'error'); return; }
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const dataUrl = evt.target.result;
+        localStorage.setItem('profilePhoto_' + currentUser, dataUrl);
+        setProfilePhoto(dataUrl);
+        showToast('Foto actualizada');
+        document.getElementById('editar-popup').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+      photoInput.value = '';
+    });
+    document.getElementById('btn-upload-foto').addEventListener('click', function() { photoInput.removeAttribute('capture'); photoInput.click(); });
+    document.getElementById('btn-camera-foto').addEventListener('click', function() { photoInput.setAttribute('capture', 'user'); photoInput.click(); });
+
+    // Perfil popup
+    document.getElementById('perfil-btn').addEventListener('click', function() {
+      document.getElementById('overlay').style.display     = 'block';
+      document.getElementById('perfil-popup').style.display = 'flex';
+    });
+    document.getElementById('overlay').addEventListener('click', function() {
+      document.getElementById('overlay').style.display      = 'none';
+      document.getElementById('perfil-popup').style.display  = 'none';
+      document.getElementById('editar-popup').style.display  = 'none';
+    });
+    document.getElementById('editar-btn').addEventListener('click', function() {
+      const mini = document.getElementById('editar-popup');
+      mini.style.display = (mini.style.display === 'block') ? 'none' : 'block';
+    });
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      localStorage.removeItem('userDEV');
+      localStorage.removeItem('sessionToken');
+      window.location.href = 'iniciosesion.html';
+    });
+    document.getElementById('cerrar-sesion-btn').addEventListener('click', function() {
+      localStorage.removeItem('userDEV');
+      localStorage.removeItem('sessionToken');
+      window.location.href = 'index.html';
+    });
+
+    // Panel crear documento
+    const btnCrear   = document.getElementById('btn-crear');
+    const crearPanel = document.getElementById('crear-panel');
+    const volverCrear = document.getElementById('volver-crear');
+    btnCrear.addEventListener('click', function() { crearPanel.style.display = 'flex'; crearPanel.setAttribute('aria-hidden', 'false'); document.getElementById('inputtt').focus(); });
+    volverCrear.addEventListener('click', function() { crearPanel.style.display = 'none'; crearPanel.setAttribute('aria-hidden', 'true'); });
+    crearPanel.addEventListener('click', function(e) { if (e.target === crearPanel || e.target.classList.contains('crear-fondo')) { crearPanel.style.display = 'none'; crearPanel.setAttribute('aria-hidden', 'true'); } });
+
+    // Nuevo perfil modal
+    var selectedColor = '#985CF9';
+    document.querySelectorAll('.color-opt').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.color-opt').forEach(function(b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        selectedColor = btn.dataset.color;
+      });
+    });
+
+    function openNuevoPerfilModal() {
+      document.getElementById('nuevo-perfil-modal').style.display = 'flex';
+      document.getElementById('perfil-nombre').focus();
+    }
+    function closeNuevoPerfilModal() {
+      document.getElementById('nuevo-perfil-modal').style.display = 'none';
+      document.getElementById('perfil-nombre').value = '';
+      document.getElementById('perfil-materia').value = '';
+      document.getElementById('perfil-fecha').value = '';
+    }
+    document.getElementById('btn-nuevo-perfil-dash').addEventListener('click', openNuevoPerfilModal);
+    document.getElementById('btn-nuevo-perfil-view').addEventListener('click', openNuevoPerfilModal);
+    document.getElementById('cerrar-perfil-modal').addEventListener('click', closeNuevoPerfilModal);
+    document.getElementById('nuevo-perfil-modal').addEventListener('click', function(e) {
+      if (e.target === document.getElementById('nuevo-perfil-modal') || e.target.classList.contains('crear-fondo')) closeNuevoPerfilModal();
+    });
+
+    // Busqueda docs
+    document.getElementById('search-input').addEventListener('input', function(e) {
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('.document-item').forEach(function(item) {
+        item.style.display = ((item.dataset.title || item.dataset.docid || '').toLowerCase().includes(q)) ? '' : 'none';
+      });
+    });
+  </script>
+  <script src="ingresos.js"></script>
+</body>
+</html>

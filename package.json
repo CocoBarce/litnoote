@@ -1,0 +1,43 @@
+{
+  "name": "proyecto-notetrivia",
+  "version": "1.0.0",
+  "description": "este proyecto mediante un sistema automatico te permite crear salas compartidas con un editor de texto completo de la manera mas facil y accesible ademas ofrece un boton para crear un juego de trivia sobre lo que estas escribiendo y de manera opcional devolverte una devolucion sobre si te conviene estudiar mas o menos",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon back-end/server.js",
+    "start": "node back-end/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3-TIC-ORT/proyecto-notetrivia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/3-TIC-ORT/proyecto-notetrivia/issues"
+  },
+  "homepage": "https://github.com/3-TIC-ORT/proyecto-notetrivia#readme",
+  "dependencies": {
+    "@tiptap/core": "^3.8.0",
+    "@tiptap/pm": "^3.8.0",
+    "@tiptap/starter-kit": "^3.8.0",
+    "bcryptjs": "^3.0.2",
+    "cohere-ai": "^7.18.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.1",
+    "openai": "^6.44.0",
+    "socket.io": "^4.8.1",
+    "soquetic": "^1.4.1",
+    "tiptap": "^1.32.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

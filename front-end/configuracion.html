@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración — Litnoote</title>
+  <link rel="stylesheet" href="configuracion.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="./IMGS/Frame 69.png">
+</head>
+<body>
+  <header class="header">
+    <a href="document.html">
+      <img src="./IMGS/Vector.png" class="flecha" alt="Volver">
+    </a>
+    <div class="title-wrap">
+      <img src="./IMGS/Engranaje.png" alt="Engranaje" class="engranaje">
+      <h1 class="configuracion">Configuración</h1>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <div class="info-card">
+      <i class="fas fa-info-circle"></i>
+      <div class="info-card-text">
+        <p>Litnoote v1.0</p>
+        <p>Lanzamiento 30 de Noviembre de 2025</p>
+      </div>
+    </div>
+
+    <div class="setting-section account-email-section">
+      <div class="email-setting">
+        <div>
+          <h2><i class="fas fa-envelope"></i> Email de la cuenta</h2>
+          <p>Se usa para recibir invitaciones a documentos compartidos.</p>
+        </div>
+        <div class="email-setting-form">
+          <input type="email" id="account-email" placeholder="tu@email.com">
+          <button id="save-email">Guardar</button>
+        </div>
+        <span id="email-feedback"></span>
+      </div>
+    </div>
+
+    <div class="setting-section">
+      <p class="p3">
+        <i class="fas fa-question-circle"></i>
+        Ayuda
+        <i class="fas fa-chevron-down chevron"></i>
+      </p>
+      <div id="panel-ayuda" class="panel oculto">
+        <h2>¿Cómo funciona esta aplicación?</h2>
+        <p>
+          Litnoote te permite tomar apuntes de manera rápida y colaborativa.
+          Después de escribir tus notas, la app genera preguntas basadas en el contenido
+          usando inteligencia artificial para ayudarte a repasar y consolidar lo aprendido.
+          Seleccioná texto en el editor y presioná el botón "Quiz" para generar preguntas automáticamente.
+        </p>
+      </div>
+    </div>
+
+    <div class="setting-section">
+      <p class="p4">
+        <i class="fas fa-history"></i>
+        Historial de versiones
+        <i class="fas fa-chevron-down chevron"></i>
+      </p>
+      <div id="panel-historial" class="panel oculto">
+        <h2>Historial de versiones</h2>
+        <p>
+          <span class="version-badge"><i class="fas fa-tag"></i> v1.0.0</span>
+          <br><br>
+          Lanzamiento inicial — 30 de Noviembre de 2025.<br>
+          Todavía no hay actualizaciones disponibles.
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function togglePanel(triggerEl, panelEl) {
+      const isOpen = !panelEl.classList.contains('oculto');
+      panelEl.classList.toggle('oculto', isOpen);
+      triggerEl.classList.toggle('open', !isOpen);
+    }
+
+    document.querySelector(".p3").addEventListener("click", function() {
+      togglePanel(this, document.getElementById("panel-ayuda"));
+    });
+
+    document.querySelector(".p4").addEventListener("click", function() {
+      togglePanel(this, document.getElementById("panel-historial"));
+    });
+  </script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="configuracion.js"></script>
+</body>
+</html>
