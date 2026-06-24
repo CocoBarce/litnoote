@@ -1,0 +1,61 @@
+{
+  "tania": {
+    "id": 1,
+    "password": "$2b$12$iceL191vgWRKO/3Nk468fOeEiWcDvwQk8sxH.AJSEZrfj5TvQmPE6",
+    "username": "tania",
+    "email": "tania.lopezobe@gmail.com",
+    "intervalo": 10,
+    "rooms": [
+      "doc_b7816a43-39ce-45d5-94ba-8b85deea248b"
+    ],
+    "sharedRooms": [],
+    "favoritos": [],
+    "streak": 1,
+    "streakMax": 1,
+    "lastActiveDate": "2026-06-22",
+    "noteStats": {
+      "doc_b7816a43-39ce-45d5-94ba-8b85deea248b": {
+        "wordCount": 556,
+        "profileId": null,
+        "updatedAt": "2026-06-22T11:47:31.751Z"
+      }
+    },
+    "noteWords": 556,
+    "xpAwards": [
+      "write:doc_b7816a43-39ce-45d5-94ba-8b85deea248b:2026-06-22"
+    ],
+    "badges": [
+      "resumidor",
+      "madrugador"
+    ],
+    "xp": 15,
+    "quizHistory": [
+      {
+        "resultId": "quiz:f7766dfa-053b-40bc-a5c3-53fe966af603",
+        "date": "2026-06-22",
+        "createdAt": "2026-06-22T11:42:35.760Z",
+        "score": 0,
+        "total": 5,
+        "xpEarned": 0,
+        "profileId": null,
+        "docId": "doc_b7816a43-39ce-45d5-94ba-8b85deea248b",
+        "mode": "normal"
+      }
+    ]
+  },
+  "lolo": {
+    "id": 2,
+    "password": "$2b$12$6Nka42ReQyunPy3FOXMClOGCU27j/QbqvkTYsQq.7IJeAxikHzzr6",
+    "username": "lolo",
+    "email": "josebarcelodawi@gma9c.com",
+    "intervalo": 10,
+    "rooms": [
+      "doc_275f2ca8-f3e8-4221-ac59-95168818a2a5"
+    ],
+    "sharedRooms": [],
+    "favoritos": [],
+    "streak": 1,
+    "streakMax": 1,
+    "lastActiveDate": "2026-06-22"
+  }
+}

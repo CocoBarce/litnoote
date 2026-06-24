@@ -4,9 +4,6 @@ node_modules
 !/back-end/.env.example
 /back-end/.session-secret
 /back-end/attachments/
-/back-end/usuarios.json
-/back-end/documentos.json
-/back-end/docs/
 /back-end/Quiz.json
 /server.out.log
 /server.err.log
