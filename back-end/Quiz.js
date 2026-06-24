@@ -57,6 +57,14 @@ function extractKeywords(input) {
     .slice(0, 12);
 }
 
+const FALLBACK_TEMPLATES = [
+  (sentence, answer) => `¿Qué significa o define mejor "${answer}"?`,
+  (sentence, answer) => `¿Cuál de estas opciones es un ejemplo de "${answer}"?`,
+  (sentence, answer) => `Según el texto, ¿para qué sirve o se aplica "${answer}"?`,
+  (sentence, answer) => `¿Qué relación tiene "${answer}" con el tema principal del texto?`,
+  (sentence, _answer) => `¿Cuál de estas afirmaciones sobre el siguiente fragmento es correcta? "${sentence.slice(0, 100)}${sentence.length > 100 ? "…" : ""}"`,
+];
+
 function buildFallbackTrivia(input, count = 5, advanced = false) {
   const text = String(input || "").replace(/\s+/g, " ").trim();
   const sentences = text.split(/(?<=[.!?])\s+/).filter(sentence => sentence.length > 25);
@@ -71,8 +79,9 @@ function buildFallbackTrivia(input, count = 5, advanced = false) {
       { texto: answer, correcta: true },
       ...distractors.map(texto => ({ texto, correcta: false }))
     ].sort(() => Math.random() - 0.5);
+    const template = FALLBACK_TEMPLATES[index % FALLBACK_TEMPLATES.length];
     return {
-      pregunta: `¿Qué concepto aparece relacionado con esta idea: "${sentence.slice(0, 120)}${sentence.length > 120 ? "…" : ""}"?`,
+      pregunta: template(sentence, answer),
       ...(advanced ? { tema: answer } : {}),
       opciones: options
     };
@@ -138,13 +147,23 @@ async function generateTrivia(socket, input, { count, advanced, eventName }, ide
     const apiKey = process.env.OPENAI_API_KEY || process.env.API;
     if (!apiKey) throw new Error("API key ausente");
     const openai = new OpenAI({ apiKey, timeout: 20000, maxRetries: 1 });
+    const diversityRule = `REGLAS DE VARIEDAD (obligatorias):
+- Cada pregunta debe ser de un tipo distinto. Tipos disponibles: DEFINICIÓN ("¿Qué es/significa X?"), EJEMPLO ("¿Cuál es un ejemplo de X?"), APLICACIÓN ("¿Para qué sirve / en qué situación se usa X?"), RELACIÓN ("¿Cómo se relaciona X con Y?"), AFIRMACIÓN ("¿Cuál de estas afirmaciones sobre el texto es correcta?").
+- No repitas el mismo tipo en la misma trivia.
+- Las opciones incorrectas deben ser plausibles, no obvias.
+- Cubrí ideas distintas del texto, no el mismo concepto en todas las preguntas.`;
+
     const prompt = advanced
       ? `${source}
 
-Generá una trivia avanzada de ${count} preguntas con 4 opciones. Cada pregunta debe incluir "tema".
+${diversityRule}
+
+Generá una trivia avanzada de ${count} preguntas con 4 opciones. Cada pregunta debe incluir "tema" (el concepto principal que evalúa).
 Respondé únicamente JSON:
 {"trivia":[{"pregunta":"string","tema":"string","opciones":[{"texto":"string","correcta":true},{"texto":"string","correcta":false},{"texto":"string","correcta":false},{"texto":"string","correcta":false}]}]}`
       : `${source}
+
+${diversityRule}
 
 Generá una trivia de ${count} preguntas con 4 opciones.
 Respondé únicamente JSON:
